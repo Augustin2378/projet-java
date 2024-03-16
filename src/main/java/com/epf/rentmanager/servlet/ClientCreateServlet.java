@@ -1,4 +1,5 @@
 package com.epf.rentmanager.servlet;
+import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Vehicle;
@@ -9,6 +10,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import javax.servlet.ServletException;
@@ -49,7 +51,32 @@ public class ClientCreateServlet extends HttpServlet {
 
         LocalDate naissance = LocalDate.parse(dateStr, formatter);
 
+        LocalDate date18Ans = LocalDate.now().minusYears(18);
 
+        if (naissance.isAfter(date18Ans)) {
+            int AgeLegalError =1;
+            request.setAttribute("AgeLegalError", 1);
+            request.getRequestDispatcher("/WEB-INF/views/users/create.jsp").forward(request, response);
+            return;
+
+        }
+
+        try {
+            if (clientService.isEmailAlreadyUsed(email)) {
+
+                request.setAttribute("EmailError", "L'adresse e-mail est déjà prise");
+                request.getRequestDispatcher("/WEB-INF/views/users/create.jsp").forward(request, response);
+                return;
+            }
+        } catch (ServiceException e) {
+            throw new ServletException("Erreur lors de la vérification de l'e-mail", e);
+        }
+
+        if (nom.length() < 3 || prenom.length() < 3) {
+            request.setAttribute("3CharError", "L'adresse e-mail est déjà prise");
+            request.getRequestDispatcher("/WEB-INF/views/users/create.jsp").forward(request, response);
+            return;
+        }
 
 
         Client client = new Client();
@@ -62,7 +89,9 @@ public class ClientCreateServlet extends HttpServlet {
         try {
 
             // Appel du service pour insérer le véhicule dans la base de données
-            clientService.create(client);
+
+                clientService.create(client);
+
 
             // Redirection vers une autre page après l'ajout du véhicule (par exemple, une page de confirmation)
             response.sendRedirect(request.getContextPath() + "/users");

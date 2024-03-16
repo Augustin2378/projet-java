@@ -95,5 +95,17 @@ public class ClientService {
 		}
 		return nb_client;
 	}
+
+	public boolean isEmailAlreadyUsed(String email) throws ServiceException {
+		try {
+			Client client = clientDao.findByEmail(email);
+			if (client != null) {
+				return true;
+			}
+			return false;
+		} catch (DaoException e) {
+			throw new ServiceException("Une erreur s'est produite lors de la recherche d'utilisateurs par e-mail", e);
+		}
+	}
 	
 }

@@ -25,11 +25,14 @@ public class ClientDao {
 	private static final String CREATE_CLIENT_QUERY = "INSERT INTO Client(nom, prenom, email, naissance) VALUES(?, ?, ?, ?);";
 	private static final String DELETE_CLIENT_QUERY = "DELETE FROM Client WHERE id=?;";
 	private static final String FIND_CLIENT_QUERY = "SELECT nom, prenom, email, naissance FROM Client WHERE id=?;";
+
+	private static final String FIND_CLIENT_QUERY_EMAIL = "SELECT id, nom, prenom, naissance FROM Client WHERE email=?;";
 	private static final String FIND_CLIENTS_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client;";
 
 	private static final String COUNT_CLIENTS_QUERY = "SELECT COUNT(*) AS total FROM Client;";
 
 	public long create(Client client) throws DaoException {
+
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:h2:~/RentManagerDatabase", "", "");
 			PreparedStatement ps =
@@ -162,6 +165,41 @@ public class ClientDao {
 		} catch (SQLException e) {
 			throw new DaoException(e);
 		}
+	}
+
+	public Client findByEmail(String email) throws DaoException {
+
+		Client client = null;
+		try {
+			Connection connection = DriverManager.getConnection("jdbc:h2:~/RentManagerDatabase", "", "");
+			PreparedStatement ps =
+					connection.prepareStatement(FIND_CLIENT_QUERY_EMAIL);
+			ps.setString(1,email);
+
+
+			ResultSet resultSet =  ps.executeQuery();
+			if (resultSet.next()) {
+
+				client = new Client();
+				client.setEmail(email);
+				client.setId(resultSet.getInt("id"));
+				client.setNom(resultSet.getString("nom"));
+				client.setPrenom(resultSet.getString("prenom"));
+
+				client.setNaissance(resultSet.getDate("naissance").toLocalDate());
+
+			}
+
+			resultSet.close();
+			ps.close();
+			connection.close();
+
+
+			return client;
+		} catch (SQLException e) {
+			throw new DaoException(e);
+		}
+
 	}
 
 

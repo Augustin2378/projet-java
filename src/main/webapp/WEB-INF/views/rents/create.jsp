@@ -72,6 +72,15 @@
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-info pull-right">Ajouter</button>
                             </div>
+                            <% if (request.getAttribute("resamemejourError") != null) { %>
+                               <span style="color: red;">le vehicule ne peux pas etre reserve 2 fois le meme jour</span>
+                            <% } %>
+                            <% if (request.getAttribute("resa7joursError") != null) { %>
+                               <span style="color: red;">la reservation est de 7 jours maximum pour un utilisateur</span>
+                            <% } %>
+                            <% if (request.getAttribute("resa30joursError") != null) { %>
+                               <span style="color: red;">la reservation est de 29 jours maximum sans pause</span>
+                            <% } %>
                             <!-- /.box-footer -->
                         </form>
                     </div>

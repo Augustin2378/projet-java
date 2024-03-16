@@ -54,6 +54,7 @@
                                     <div class="col-sm-10">
                                         <input type="naissance" class="form-control" id="naissance" name="naissance" required
                                                data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+
                                     </div>
                                 </div>
                             </div>
@@ -61,8 +62,18 @@
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-info pull-right">Ajouter</button>
                             </div>
+                            <% if (request.getAttribute("AgeLegalError") != null) { %>
+                             <span style="color: red;">Le client doit etre majeur</span>
+                            <% } %>
+                            <% if (request.getAttribute("EmailError") != null) { %>
+                             <span style="color: red;">L adresse mail est deja prise</span>
+                            <% } %>
+                            <% if (request.getAttribute("3CharError") != null) { %>
+                             <span style="color: red;"> le nom et le prenom d un client doivent faire au moins 3 caracteres</span>
+                            <% } %>
                             <!-- /.box-footer -->
                         </form>
+
                     </div>
                     <!-- /.box -->
                 </div>

@@ -38,6 +38,12 @@ public class VehicleCreateServlet extends HttpServlet {
         String modele = request.getParameter("modele");
         int nbPlaces = Integer.parseInt(request.getParameter("seats"));
 
+        if (nbPlaces < 2 || nbPlaces > 9) {
+            request.setAttribute("nbPlacesError", "1");
+            request.getRequestDispatcher("/WEB-INF/views/vehicles/create.jsp").forward(request, response);
+            return;
+        }
+
         // Créer un nouvel objet Vehicle avec les données saisies
         Vehicle vehicle = new Vehicle();
         vehicle.setConstructeur(constructeur);

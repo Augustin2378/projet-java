@@ -1,6 +1,8 @@
 package com.epf.rentmanager.service;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import com.epf.rentmanager.dao.ClientDao;
@@ -122,6 +124,42 @@ public class ReservationService {
         return nb_reservation;
     }
 
+    public static boolean isCarRentTooLong(long id) throws ServiceException {
+        int compteur = 0;
+        List<Reservation> reservations = findResaByVehicleId(id);
 
+
+        reservations.sort(Comparator.comparing(Reservation::getDebut));
+        System.out.println("sizeee" + reservations.size());
+        for (int i = 0; i < reservations.size() -1 ; i++) {
+            Reservation currentReservation = reservations.get(i);
+            Reservation nextReservation = reservations.get(i + 1);
+
+
+            long joursEntreReservations = ChronoUnit.DAYS.between(currentReservation.getFin(), nextReservation.getDebut());
+            System.out.println("jours entre resa " + joursEntreReservations);
+            if (joursEntreReservations == 1) {
+                if(compteur ==0){
+                    compteur += ChronoUnit.DAYS.between(reservations.get(i).getDebut(), reservations.get(i+1).getFin());
+
+                }
+                else{
+                    compteur += ChronoUnit.DAYS.between(reservations.get(i+1).getDebut(), reservations.get(i+1).getFin());
+                }
+
+
+            }
+
+        }
+
+
+        System.out.println("compteur" + compteur);
+        if(compteur >=30){
+            return true;
+        }
+
+
+        return false;
+    }
 
 }

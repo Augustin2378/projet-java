@@ -72,6 +72,9 @@
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-info pull-right">Ajouter</button>
                             </div>
+                            <% if (request.getAttribute("nbPlacesError") != null) { %>
+                             <span style="color: red;"> le nombre de places doit etre compris entre 2 et 9</span>
+                            <% } %>
                             <!-- /.box-footer -->
                         </form>
                     </div>
