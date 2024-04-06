@@ -107,5 +107,22 @@ public class ClientService {
 			throw new ServiceException("Une erreur s'est produite lors de la recherche d'utilisateurs par e-mail", e);
 		}
 	}
-	
+
+	public void update(Client client) throws ServiceException {
+		if (client.getPrenom().isEmpty() || client.getNom().isEmpty()) {
+			throw new ServiceException("L'utilisateur doit avoir un nom et un prénom");
+		}
+		if (client.getNom() != null) {
+			String newNom = client.getNom().toUpperCase();
+			client.setNom(newNom);
+		}
+
+		try {
+			clientDao.update(client);
+		} catch (DaoException e) {
+			throw new ServiceException("Une erreur a eu lieu lors de la mise à jour de l'utilisateur");
+		}
+	}
+
+
 }

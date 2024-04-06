@@ -20,7 +20,7 @@ public class VehicleService {
 	@Autowired
 	public VehicleService(VehicleDao vehicleDao) {
 		this.vehicleDao = vehicleDao;
-	} // etait privé initialement
+	}
 
 
 	public VehicleService(){
@@ -98,5 +98,21 @@ public class VehicleService {
 		}
 		return nb_vehicle;
 	}
-	
+
+	public void update(Vehicle vehicle) throws ServiceException {
+		if (vehicle.getConstructeur().isEmpty() || vehicle.getModele().isEmpty()) {
+			throw new ServiceException("La voiture doit avoir une marque et un modèle");
+		}
+		if(vehicle.getNb_places()<1){
+			throw new ServiceException("Le nombre de place est inférieur à 1");
+		}
+
+		try {
+			vehicleDao.update(vehicle);
+		} catch (DaoException e) {
+			throw new ServiceException("Une erreur a eu lieu lors de la mise à jour de la voiture", e);
+		}
+	}
+
+
 }

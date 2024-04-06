@@ -26,6 +26,13 @@ public class Client {
         this.email = email;
         this.naissance = naissance.toLocalDate();
     }
+    public Client(String nom, String prenom, String email,Date naissance) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.naissance = naissance.toLocalDate();
+    }
 
     public Client() {
 

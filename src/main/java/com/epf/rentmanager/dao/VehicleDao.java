@@ -18,6 +18,8 @@ public class VehicleDao {
 
 
 	private static final String CREATE_VEHICLE_QUERY = "INSERT INTO Vehicle(constructeur,modele, nb_places) VALUES(?, ?,?)";
+	private static final String UPDATE_VEHICLE_QUERY = "UPDATE Vehicle SET constructeur=?, modele=?, nb_places=? WHERE id=?;";
+
 	private static final String DELETE_VEHICLE_QUERY = "DELETE FROM Vehicle WHERE id=?;";
 	private static final String FIND_VEHICLE_QUERY = "SELECT id, constructeur, modele, nb_places FROM Vehicle WHERE id=?;";
 	private static final String FIND_VEHICLES_QUERY = "SELECT id, constructeur, modele, nb_places FROM Vehicle;";
@@ -51,6 +53,27 @@ public class VehicleDao {
             throw new DaoException(e);
         }
     }
+
+	public void update(Vehicle vehicle) throws DaoException {
+		try {
+
+			Connection connection = DriverManager.getConnection("jdbc:h2:~/RentManagerDatabase", "", "");
+			PreparedStatement ps = connection.prepareStatement(UPDATE_VEHICLE_QUERY);
+
+			ps.setString(1, vehicle.getConstructeur());
+			ps.setString(2, vehicle.getModele());
+			ps.setInt(3, vehicle.getNb_places());
+			ps.setLong(4, vehicle.getId());
+
+			ps.executeUpdate();
+
+			ps.close();
+			connection.close();
+		} catch (SQLException e) {
+			throw new DaoException(e);
+		}
+	}
+
 
 	public long delete(Vehicle vehicle) throws DaoException {
 		try {

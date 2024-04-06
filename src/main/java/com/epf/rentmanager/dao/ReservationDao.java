@@ -20,6 +20,8 @@ public class ReservationDao {
 
 	
 	private static final String CREATE_RESERVATION_QUERY = "INSERT INTO Reservation(client_id, vehicle_id, debut, fin) VALUES(?, ?, ?, ?);";
+	private static final String UPDATE_RESERVATION_QUERY = "UPDATE Reservation SET client_id=?, vehicle_id=?, debut=?, fin=? WHERE id=?";
+
 	private static final String DELETE_RESERVATION_QUERY = "DELETE FROM Reservation WHERE id=?;";
 	private static final String FIND_RESERVATIONS_BY_CLIENT_QUERY = "SELECT id, vehicle_id, debut, fin FROM Reservation WHERE client_id=?;";
 	private static final String FIND_RESERVATIONS_BY_VEHICLE_QUERY = "SELECT id, client_id, debut, fin FROM Reservation WHERE vehicle_id=?;";
@@ -43,7 +45,6 @@ public class ReservationDao {
 			ps.execute();
 			ResultSet resultSet = ps.getGeneratedKeys();
 			if (resultSet.next()) {
-				System.out.print("YESSS ");
 				return resultSet.getInt(1);
 
 			}
@@ -58,7 +59,28 @@ public class ReservationDao {
 			throw new DaoException(e);
 		}
 	}
-	
+
+	public void update(Reservation reservation) throws DaoException {
+		try {
+			Connection connection = DriverManager.getConnection("jdbc:h2:~/RentManagerDatabase", "", "");
+			PreparedStatement ps = connection.prepareStatement(UPDATE_RESERVATION_QUERY);
+
+			ps.setLong(1, reservation.getClient_id());
+			ps.setLong(2, reservation.getVehicle_id());
+			ps.setDate(3, Date.valueOf(reservation.getDebut()));
+			ps.setDate(4, Date.valueOf(reservation.getFin()));
+			ps.setLong(5, reservation.getId());
+
+			ps.executeUpdate();
+
+			ps.close();
+			connection.close();
+		} catch (SQLException e) {
+			throw new DaoException(e);
+		}
+	}
+
+
 	public long delete(Reservation reservation) throws DaoException {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:h2:~/RentManagerDatabase", "", "");

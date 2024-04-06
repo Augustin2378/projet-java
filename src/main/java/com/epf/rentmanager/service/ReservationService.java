@@ -37,8 +37,7 @@ public class ReservationService {
         long id_reservation = 0;
 
         try {
-            id_reservation = reservationDao.create(reservation); //etait originalement ClientDao mais j'ai changé
-            System.out.print("idddddd" + id_reservation);
+            id_reservation = reservationDao.create(reservation);
         } catch (DaoException e) {
 
 
@@ -161,5 +160,17 @@ public class ReservationService {
 
         return false;
     }
+
+    public void update(Reservation reservation) throws ServiceException {
+        try {
+
+            reservationDao.update(reservation);
+        } catch (DaoException e) {
+            throw new ServiceException("Une erreur a eu lieu lors de la mise à jour de la réservation", e);
+        }
+    }
+
+
+
 
 }

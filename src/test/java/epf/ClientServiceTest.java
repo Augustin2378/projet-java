@@ -1,59 +1,78 @@
-package com.epf.rentmanager.service;
+package com.epf.rentmanager;
 
-import static org.junit.Assert.assertEquals;
+import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.model.Client;
+import com.epf.rentmanager.service.ClientService;
+import com.epf.rentmanager.dao.ClientDao;
+import com.epf.rentmanager.exception.DaoException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.BeforeEach;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import com.epf.rentmanager.dao.ClientDao;
-import com.epf.rentmanager.exception.DaoException;
-import com.epf.rentmanager.exception.ServiceException;
-import com.epf.rentmanager.model.Client;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Mock;
 
-import org.junit.Before;
-import org.junit.Test;
+import java.sql.Date;
+import java.time.LocalDate;
 
 public class ClientServiceTest {
-
+    @InjectMocks
     private ClientService clientService;
+
+    @Mock
     private ClientDao clientDao;
 
-    @Before
-    public void setUp() {
-        clientDao = mock(ClientDao.class);
-        clientService = new ClientService(clientDao);
+    @BeforeEach
+    void setUp() {
+        // Initialisation des mocks
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testCreateClient() throws DaoException, ServiceException {
-        // Mocking data
-        Client client = new Client();
-        client.setNom("Doe");
-        client.setPrenom("John");
-        long expectedId = 1L;
-
-        // Mocking behavior of DAO
-        when(clientDao.create(client)).thenReturn(expectedId);
-
-        // Test method
-        long id = clientService.create(client);
-
-        // Assert
-        assertEquals(expectedId, id);
+    public void findAll_should_fail_when_dao_throws_exception() throws DaoException {
+        // When
+        when(this.clientDao.findAll()).thenThrow(DaoException.class);
+        // Then
+        assertThrows(ServiceException.class, () -> clientService.findAll());
     }
 
-    @Test(expected = ServiceException.class)
-    public void testCreateClientWithEmptyName() throws DaoException, ServiceException {
-        // Mocking data
-        Client client = new Client();
-        client.setNom("");
-        client.setPrenom("John");
+    @Test
+    public void create_should_fail_when_last_name_is_empty() throws DaoException {
+        // Given
+        Client client = new Client("","evan","evan@test.com", Date.valueOf(LocalDate.of(2002, 10, 18)));
+        when(this.clientDao.create(client)).thenThrow(DaoException.class);
 
-        // Test method
-        clientService.create(client);
+        // Then
+        assertThrows(ServiceException.class, () -> clientService.create(client));
     }
 
-    // Add more test cases for other methods...
+    @Test
+    public void create_should_fail_when_first_name_is_empty() throws DaoException {
+        // Given
+        Client client = new Client("durant","","evan@test.com", Date.valueOf(LocalDate.of(2002, 10, 18)));
+        when(this.clientDao.create(client)).thenThrow(DaoException.class);
+
+        // Then
+        assertThrows(ServiceException.class, () -> clientService.create(client));
+    }
+
+    @Test
+    public void findbyid_should_fail_when_id_doesnt_exist() throws DaoException {
+        // Given
+
+        when(this.clientDao.findById(9999)).thenThrow(DaoException.class);
+
+        // Then
+        assertThrows(ServiceException.class, () -> clientService.findById(9999));
+    }
+
 }

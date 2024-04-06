@@ -1,7 +1,7 @@
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
-<%@include file="/WEB-INF/views/common/head.jsp"%>
+<%@ include file="/WEB-INF/views/common/head.jsp"%>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
@@ -25,7 +25,8 @@
                     <!-- Horizontal Form -->
                     <div class="box">
                         <!-- form start -->
-                        <form class="form-horizontal" method="post" action="/rentmanager/rents/create">
+                        <form class="form-horizontal" method="post" action="/rentmanager/rents/edit">
+                        <input type="hidden" name="id" value="<%= request.getParameter("id") %>">
                             <div class="box-body">
                                 <div class="form-group">
                                     <label for="client" class="col-sm-2 control-label">Client</label>
@@ -73,17 +74,16 @@
                                 <button type="submit" class="btn btn-info pull-right">Ajouter</button>
                             </div>
                             <% if (request.getAttribute("resamemejourError") != null) { %>
-                               <span style="color: red;">Le vehicule ne peux pas etre reserve 2 fois le meme jour</span>
+                               <span style="color: red;">le vehicule ne peux pas etre reserve 2 fois le meme jour</span>
                             <% } %>
                             <% if (request.getAttribute("resa7joursError") != null) { %>
-                               <span style="color: red;">La reservation est de 7 jours maximum pour un utilisateur</span>
+                               <span style="color: red;">la reservation est de 7 jours maximum pour un utilisateur</span>
                             <% } %>
                             <% if (request.getAttribute("resa30joursError") != null) { %>
-                               <span style="color: red;">La reservation est de 29 jours maximum sans pause</span>
+                               <span style="color: red;">la reservation est de 29 jours maximum sans pause</span>
                             <% } %>
                             <% if (request.getAttribute("debutavantfinError") != null) { %>
                                <span style="color: red;">La date de debut doit etre avant la date de fin</span>
-
                             <% } %>
                             <!-- /.box-footer -->
                         </form>
