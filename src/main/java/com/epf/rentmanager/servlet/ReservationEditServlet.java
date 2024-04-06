@@ -98,14 +98,13 @@ public class ReservationEditServlet extends HttpServlet {
 
 
             reservations.sort(Comparator.comparing(Reservation::getDebut));
-            System.out.println("sizeee" + reservations.size());
             for (int i = 0; i < reservations.size() -1 ; i++) {
                 Reservation currentReservation = reservations.get(i);
                 Reservation nextReservation = reservations.get(i + 1);
 
 
                 long joursEntreReservations = ChronoUnit.DAYS.between(currentReservation.getFin(), nextReservation.getDebut());
-                System.out.println("jours entre resa " + joursEntreReservations);
+
                 if (joursEntreReservations == 1) {
                     if(compteur ==0){
                         compteur += ChronoUnit.DAYS.between(reservations.get(i).getDebut(), reservations.get(i+1).getFin()) + 1;
@@ -129,9 +128,6 @@ public class ReservationEditServlet extends HttpServlet {
                 }
             }
 
-
-
-            System.out.println("compteur" + compteur);
 
             if(compteur>=30){
                 request.setAttribute("resa30joursError", "1");

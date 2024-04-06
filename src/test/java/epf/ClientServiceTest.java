@@ -33,45 +33,32 @@ public class ClientServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Initialisation des mocks
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
     public void findAll_should_fail_when_dao_throws_exception() throws DaoException {
-        // When
         when(this.clientDao.findAll()).thenThrow(DaoException.class);
-        // Then
         assertThrows(ServiceException.class, () -> clientService.findAll());
     }
 
     @Test
     public void create_should_fail_when_last_name_is_empty() throws DaoException {
-        // Given
         Client client = new Client("","evan","evan@test.com", Date.valueOf(LocalDate.of(2002, 10, 18)));
         when(this.clientDao.create(client)).thenThrow(DaoException.class);
-
-        // Then
         assertThrows(ServiceException.class, () -> clientService.create(client));
     }
 
     @Test
     public void create_should_fail_when_first_name_is_empty() throws DaoException {
-        // Given
         Client client = new Client("durant","","evan@test.com", Date.valueOf(LocalDate.of(2002, 10, 18)));
         when(this.clientDao.create(client)).thenThrow(DaoException.class);
-
-        // Then
         assertThrows(ServiceException.class, () -> clientService.create(client));
     }
 
     @Test
     public void findbyid_should_fail_when_id_doesnt_exist() throws DaoException {
-        // Given
-
         when(this.clientDao.findById(9999)).thenThrow(DaoException.class);
-
-        // Then
         assertThrows(ServiceException.class, () -> clientService.findById(9999));
     }
 

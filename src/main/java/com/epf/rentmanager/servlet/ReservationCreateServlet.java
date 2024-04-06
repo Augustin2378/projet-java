@@ -66,7 +66,6 @@ public class ReservationCreateServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse
             response) throws ServletException, IOException {
-// traitement du formulaire (appel à la méthode de sauvegarde)
         int client_id = Integer.parseInt(request.getParameter("client"));
         int vehicle_id = Integer.parseInt(request.getParameter("car"));
         String date_fin = request.getParameter("end");
@@ -158,17 +157,11 @@ public class ReservationCreateServlet extends HttpServlet {
             return;
         }
 
-
-
-
         Reservation reservation = new Reservation();
                 reservation.setClient_id(client_id);
                 reservation.setVehicle_id(vehicle_id);
                 reservation.setDebut(debut);
                 reservation.setFin(fin);
-
-
-
 
                 try {
 

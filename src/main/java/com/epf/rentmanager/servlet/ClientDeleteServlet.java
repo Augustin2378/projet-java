@@ -19,7 +19,6 @@ public class ClientDeleteServlet extends HttpServlet {
     @Autowired
     private ClientService clientService;
 
-    //private Client client;
 
     @Override
     public void init() throws ServletException {
@@ -37,11 +36,7 @@ public class ClientDeleteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         long clientId = Long.parseLong(request.getParameter("id"));
-       /** try {
-            client = clientService.findById(clientId);
-        } catch (ServiceException e) {
-            throw new RuntimeException(e);
-        }**/
+
 
         try {
             clientService.delete(clientService.findById(clientId));

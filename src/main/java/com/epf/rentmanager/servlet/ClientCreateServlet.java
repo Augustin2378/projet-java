@@ -40,13 +40,11 @@ public class ClientCreateServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse
             response) throws ServletException, IOException {
-// traitement du formulaire (appel à la méthode de sauvegarde)
         String nom = request.getParameter("last_name");
         String prenom = request.getParameter("first_name");
         String email = request.getParameter("email");
         String dateStr = request.getParameter("naissance");
 
-        // Définition du motif de format de date
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         LocalDate naissance = LocalDate.parse(dateStr, formatter);
@@ -54,7 +52,6 @@ public class ClientCreateServlet extends HttpServlet {
         LocalDate date18Ans = LocalDate.now().minusYears(18);
 
         if (naissance.isAfter(date18Ans)) {
-            int AgeLegalError =1;
             request.setAttribute("AgeLegalError", 1);
             request.getRequestDispatcher("/WEB-INF/views/users/create.jsp").forward(request, response);
             return;
@@ -88,12 +85,8 @@ public class ClientCreateServlet extends HttpServlet {
 
         try {
 
-            // Appel du service pour insérer le véhicule dans la base de données
-
                 clientService.create(client);
 
-
-            // Redirection vers une autre page après l'ajout du véhicule (par exemple, une page de confirmation)
             response.sendRedirect(request.getContextPath() + "/users");
         } catch (ServiceException e) {
             throw new ServletException("Erreur lors de la création du client", e);

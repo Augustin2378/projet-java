@@ -19,7 +19,7 @@ public class VehicleDeleteServlet extends HttpServlet {
 
     @Autowired
     private VehicleService vehicleService;
-    //private Vehicle vehicle;
+
     @Override
     public void init() throws ServletException {
         super.init();
@@ -35,11 +35,6 @@ public class VehicleDeleteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         long vehicleId = Long.parseLong(request.getParameter("id"));
-        /**try {
-            vehicle = vehicleService.findById(vehicleId);
-        } catch (ServiceException e) {
-            throw new RuntimeException(e);
-        }**/
 
         try {
             vehicleService.delete(vehicleService.findById(vehicleId));

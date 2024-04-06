@@ -33,7 +33,7 @@ public class VehicleCreateServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse
             response) throws ServletException, IOException {
-// traitement du formulaire (appel à la méthode de sauvegarde)
+
         String constructeur = request.getParameter("manufacturer");
         String modele = request.getParameter("modele");
         int nbPlaces = Integer.parseInt(request.getParameter("seats"));
@@ -44,7 +44,6 @@ public class VehicleCreateServlet extends HttpServlet {
             return;
         }
 
-        // Créer un nouvel objet Vehicle avec les données saisies
         Vehicle vehicle = new Vehicle();
         vehicle.setConstructeur(constructeur);
         vehicle.setModele(modele);
@@ -52,10 +51,9 @@ public class VehicleCreateServlet extends HttpServlet {
 
 
         try {
-            // Appel du service pour insérer le véhicule dans la base de données
+
             vehicleService.create(vehicle);
 
-            // Redirection vers une autre page après l'ajout du véhicule (par exemple, une page de confirmation)
             response.sendRedirect(request.getContextPath() + "/cars");
         } catch (ServiceException e) {
             throw new ServletException("Erreur lors de la création du véhicule", e);
